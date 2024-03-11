@@ -1,9 +1,9 @@
 use bitcoin_hashes::{sha256, Hash};
 use std::fs;
 use std::io::Read;
+use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::str::FromStr;
-use std::os::unix::fs::PermissionsExt;
 
 include!("src/versions.rs");
 
@@ -52,6 +52,8 @@ fn main() {
             .into_reader()
             .read_to_end(&mut downloaded_bytes)
             .unwrap();
+        dbg!(_size);
+        dbg!(downloaded_bytes.len());
 
         let downloaded_hash = sha256::Hash::hash(&downloaded_bytes);
         assert_eq!(expected_hash, downloaded_hash);
@@ -63,4 +65,3 @@ fn main() {
         fs::set_permissions(&filepath, perms).unwrap();
     }
 }
-
